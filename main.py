@@ -34,7 +34,7 @@ with open(path,'r',newline='') as ARQUIVO:
         dados.append({"HORA":palavras[0],"BATIMENTO":palavras[1],"PRESSAO":palavras[2],"TEMPERATURA":palavras[3]}) 
 
 print("------------------------------------------------")
-print("1 - Coelta dos dados.") 
+print("1 - Coleta dos dados.") 
    
 ## Coleta dos dados. 
 hora=[]
@@ -49,8 +49,10 @@ for i in range(0,len(dados)):
 
 print("------------------------------------------------")
 print("2 - Limpeza dos dados.")
-# print("\t2.1 - Exercicio 1.")
-## Limpeza dos dados
+"""
+    Exercicio 1.
+    Limpeza dos dados
+"""
 for i in range(len(dados)):
     if (batimento[i]<0) or (batimento[i]>200):
         batimento[i]=media(batimento[i-1],batimento[i+1])
@@ -60,6 +62,10 @@ for i in range(len(dados)):
         temperatura[i]=media(temperatura[i-1],temperatura[i+1])
 print("------------------------------------------------")
 print("3 - Tratamento dos dados.")
+"""
+    Separando os dias por dias
+    contendo os registros das 24 horas.
+"""
 matriz_m = []
 matriz_f = []
 
@@ -105,6 +111,14 @@ matriz_master.append(matriz_m3)
 
 print("------------------------------------------------")
 print("4 - Mineração dos dados.")
+"""
+    Extraindo os seguintes valores.
+        1 - Média de cada dia.
+        2 - Médiana de cada dia.
+        3 - Desvio Padrão.
+        4 - Variancia.
+"""
+
 u = 1
 dados_extraidos = []
 dados_b = []
@@ -168,6 +182,9 @@ dados_extraidos.append(dados_p)
 dados_extraidos.append(dados_t)
 
 """
+Os valores extraidos estão
+com a seguinte estrutura:
+
 dados_extraidos[A][B][C]
 
 A - São os Atributos.
@@ -188,131 +205,111 @@ C - É o valor referente ao dia.
 """
 print("------------------------------------------------")
 print("5 - Análise de conteúdo.")
-hrs = []
-for i in range(100): hrs.append(i)
+dia = 100
+dias = []
+for i in range(dia): dias.append(i)
 
-plt.scatter(hrs, dados_extraidos[0][0])
+print(f"\tMédia de Batimento Cardiaco por {dia} dias.")
+plt.scatter(dias, dados_extraidos[0][0])
 plt.title(f"SCARTTER - Batimentos da amostra")
-plt.xlabel("FAIXA DE DIA")
+plt.xlabel("FAIXA DE DIAS")
 plt.ylabel(f"FAIXA DE MEDIA de BATIMENTO")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[1][0])
-plt.title(f"SCARTTER - Pressão arterial da amostra")
-plt.xlabel("FAIXA DE DIA")
+print("------------------------------------------------")
+print(f"\tMédia de Pressão Arterial por {dia} dias.")
+plt.scatter(dias, dados_extraidos[1][0])
+plt.title(f"SCARTTER - Pressão Arterial da amostra")
+plt.xlabel("FAIXA DE DIAS")
 plt.ylabel(f"FAIXA DE MEDIA de Pressão")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[2][0])
-plt.title(f"SCARTTER - Temperatura da amostra")
-plt.xlabel("FAIXA DE DIA")
+print("------------------------------------------------")
+print(f"\tMédia de Temperatura Corporal por {dia} dias.")
+plt.scatter(dias, dados_extraidos[2][0])
+plt.title(f"SCARTTER - Temperatura Corporal da amostra")
+plt.xlabel("FAIXA DE DIAS")
 plt.ylabel(f"FAIXA DE MÉDIA")
 plt.grid()
 plt.show()
 print("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[0][1])
+print(f"\tMediana de Batimento Cardiaco por {dia} dias.")
+plt.scatter(dias, dados_extraidos[0][1])
 plt.title(f"SCARTTER - Batimentos da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE MEDIANA de BATIMENTO")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[1][1])
+print("------------------------------------------------")
+print(f"\tMediana de Pressão Arterial por {dia} dias.")
+plt.scatter(dias, dados_extraidos[1][1])
 plt.title(f"SCARTTER - Pressão arterial da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE MEDIANA de Pressão")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[2][1])
+print("------------------------------------------------")
+print(f"\tMediana de Temperatura Corporal por {dia} dias.")
+plt.scatter(dias, dados_extraidos[2][1])
 plt.title(f"SCARTTER - Temperatura da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE MEDIANA de Temperatura")
 plt.grid()
 plt.show()
 print("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[0][2])
+print(f"\tDesvio Padrão de Batimento Cardiaco por {dia} dias.")
+plt.scatter(dias, dados_extraidos[0][2])
 plt.title(f"SCARTTER - Batimentos da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Desvio Padrão de BATIMENTO")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[1][2])
+print("------------------------------------------------")
+print(f"\tDesvio Padrão de Pressão Arterial por {dia} dias.")
+plt.scatter(dias, dados_extraidos[1][2])
 plt.title(f"SCARTTER - Pressão arterial da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Desvio Padrão de Pressão")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[2][2])
+print("------------------------------------------------")
+print(f"\tDesvio Padrão de Temperatura Corporal por {dia} dias.")
+plt.scatter(dias, dados_extraidos[2][2])
 plt.title(f"SCARTTER - Temperatura da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Desvio Padrão")
 plt.grid()
 plt.show()
 print("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[0][3])
+print(f"\tVariancia de Batimento Cardiaco por {dia} dias.")
+plt.scatter(dias, dados_extraidos[0][3])
 plt.title(f"SCARTTER - Batimentos da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Variancia")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[1][3])
+print("------------------------------------------------")
+print(f"\tVariancia de Pressão Arterial por {dia} dias.")
+plt.scatter(dias, dados_extraidos[1][3])
 plt.title(f"SCARTTER - Pressão arterial da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Variancia")
 plt.grid()
 plt.show()
-("------------------------------------------------")
-hrs = []
-for i in range(100): hrs.append(i)
-
-plt.scatter(hrs, dados_extraidos[2][3])
+print("------------------------------------------------")
+print(f"\tVariancia de Temperatura Corporal por {dia} dias.")
+plt.scatter(dias, dados_extraidos[2][3])
 plt.title(f"SCARTTER - Temperatura da amostra")
 plt.xlabel("FAIXA DE DIA")
 plt.ylabel(f"FAIXA DE Variancia")
 plt.grid()
 plt.show()
 print("------------------------------------------------")
-print("\tCORRELAÇÃO ENTRE OS TRÊS PARÂMETROS.")
+print("\tCorrelação entre os três parâmetros.")
 auxDF=[]
 auxDF+=[(float(float(matriz_master[0][0][j])),float(matriz_master[1][0][j]),float(matriz_master[2][0][j])) for j in range(0,24)]
 DataFrame=[]
 # MONTAGEM
 DataFrame = pd.DataFrame(auxDF,columns=["BATIMENTO", "PRESSAO","TEMPERATURA"])
 print(DataFrame.corr())
-# print("------------------------------------------------")
+print("------------------------------------------------")
