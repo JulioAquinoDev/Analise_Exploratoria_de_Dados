@@ -13,11 +13,31 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn.metrics import r2_score
 
+"""
+    Listas utilizadas para obter os nomes
+    de acordo com a posição e a escolha do menu de opções.
+    Está sendo utilizado para imprimir os valores.
+"""
+PARAMETROS = ["Batimento", "Pressão", "Temperatura"]
+EXPLORADOS = ["Média", "Mediana", "Desvio Padrão", "Variancia", "Valor Minimo", "Valor Máximo", "Amplitude"]
 
-# metodos que retorna
-# media de dosi valores.
+"""
+  Retorna media de dois valores.
+"""
 def media(v1,v2):
     return (v1+v2)/2
+
+"""
+    Retorna uma matriz com
+    cada item da lista obtida.
+"""
+def distribuirNaMatriz(a):
+    x = []
+    for i in a:
+        y = []
+        y.append(i)
+        x.append(y)
+    return x
 
 
 ## leitura dos dados.
@@ -52,13 +72,20 @@ print("2 - Limpeza dos dados.")
 """
     Exercicio 1.
     Limpeza dos dados
+    
+    1 - Se batimento é menor que zero OU maior que 100.
+    2 - Se Pressão é menor que zero OU maior que 20.
+    3 - Se Temperatura é menor que zero OU maior que 40.
+    
+    Para cada condição com ruido, será subistituido peloa
+    média do valor anterio e do próximo.
 """
 for i in range(len(dados)):
-    if (batimento[i]<0) or (batimento[i]>200):
+    if (batimento[i] <= 0) or (batimento[i] > 100):
         batimento[i]=media(batimento[i-1],batimento[i+1])
-    if (pressao[i]<0) or (pressao[i]>25):
+    if (pressao[i] <= 0) or (pressao[i] > 20):
         pressao[i]=media(pressao[i-1],pressao[i+1])
-    if (temperatura[i]<0) or (temperatura[i]>50):
+    if (temperatura[i] <= 0) or (temperatura[i] > 40):
         temperatura[i]=media(temperatura[i-1],temperatura[i+1])
 print("------------------------------------------------")
 print("3 - Tratamento dos dados.")
@@ -117,6 +144,7 @@ print("4 - Mineração dos dados.")
         2 - Médiana de cada dia.
         3 - Desvio Padrão.
         4 - Variancia.
+        5 - amplitude
 """
 
 u = 1
@@ -129,16 +157,26 @@ dados_m_b = []
 dados_md_b = []
 dados_dp_b = []
 dados_v_b = []
+dados_min_b = []
+dados_max_b = []
+dados_amp_b = []
+
 
 dados_m_p = []
 dados_md_p = []
 dados_dp_p = []
 dados_v_p = []
+dados_min_p = []
+dados_max_p = []
+dados_amp_p = []
 
 dados_m_t = []
 dados_md_t = []
 dados_dp_t = []
 dados_v_t = []
+dados_min_t = []
+dados_max_t = []
+dados_amp_t = []
 
 for a in range(100):
     b = matriz_master[0][a]
@@ -149,16 +187,26 @@ for a in range(100):
     dados_md_b.append(np.median(b))
     dados_dp_b.append(np.std(b))
     dados_v_b.append(np.var(b))
+    dados_min_b.append(min(b))
+    dados_max_b.append(max(b))
+    dados_amp_b.append((max(b) - min(b)))
+    
     
     dados_m_p.append(np.average(p))
     dados_md_p.append(np.median(p))
     dados_dp_p.append(np.std(p))
     dados_v_p.append(np.var(p))
+    dados_min_p.append(min(p))
+    dados_max_p.append(max(p))
+    dados_amp_p.append((max(p) - min(p)))
     
     dados_m_t.append(np.average(t))
     dados_md_t.append(np.median(t))
     dados_dp_t.append(np.std(t))
     dados_v_t.append(np.var(t))
+    dados_min_t.append(min(t))
+    dados_max_t.append(max(t))
+    dados_amp_t.append((max(t) - min(t)))
     
     u += 1
 
@@ -166,16 +214,25 @@ dados_b.append(dados_m_b)
 dados_b.append(dados_md_b)
 dados_b.append(dados_dp_b)
 dados_b.append(dados_v_b)
+dados_b.append(dados_min_b)
+dados_b.append(dados_max_b)
+dados_b.append(dados_amp_b)
 
 dados_p.append(dados_m_p)
 dados_p.append(dados_md_p)
 dados_p.append(dados_dp_p)
 dados_p.append(dados_v_p)
+dados_p.append(dados_min_p)
+dados_p.append(dados_max_p)
+dados_p.append(dados_amp_p)
 
 dados_t.append(dados_m_t)
 dados_t.append(dados_md_t)
 dados_t.append(dados_dp_t)
 dados_t.append(dados_v_t)
+dados_t.append(dados_min_t)
+dados_t.append(dados_max_t)
+dados_t.append(dados_amp_t)
 
 dados_extraidos.append(dados_b)
 dados_extraidos.append(dados_p)
@@ -197,6 +254,9 @@ B - São os dados extraiso.
     1 - Mediana.
     2 - Desvio Padrão.
     3 - Variancia
+    4 - Valor Minimo.
+    5 - Valor maximo.
+    6 - Amplitute.
 
 C - É o valor referente ao dia.
     0 - primeiro dia.
@@ -205,106 +265,6 @@ C - É o valor referente ao dia.
 """
 print("------------------------------------------------")
 print("5 - Análise de conteúdo.")
-dia = 100
-dias = []
-for i in range(dia): dias.append(i)
-
-print(f"\tMédia de Batimento Cardiaco por {dia} dias.")
-plt.scatter(dias, dados_extraidos[0][0])
-plt.title(f"SCARTTER - Batimentos da amostra")
-plt.xlabel("FAIXA DE DIAS")
-plt.ylabel(f"FAIXA DE MEDIA de BATIMENTO")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tMédia de Pressão Arterial por {dia} dias.")
-plt.scatter(dias, dados_extraidos[1][0])
-plt.title(f"SCARTTER - Pressão Arterial da amostra")
-plt.xlabel("FAIXA DE DIAS")
-plt.ylabel(f"FAIXA DE MEDIA de Pressão")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tMédia de Temperatura Corporal por {dia} dias.")
-plt.scatter(dias, dados_extraidos[2][0])
-plt.title(f"SCARTTER - Temperatura Corporal da amostra")
-plt.xlabel("FAIXA DE DIAS")
-plt.ylabel(f"FAIXA DE MÉDIA")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tMediana de Batimento Cardiaco por {dia} dias.")
-plt.scatter(dias, dados_extraidos[0][1])
-plt.title(f"SCARTTER - Batimentos da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE MEDIANA de BATIMENTO")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tMediana de Pressão Arterial por {dia} dias.")
-plt.scatter(dias, dados_extraidos[1][1])
-plt.title(f"SCARTTER - Pressão arterial da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE MEDIANA de Pressão")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tMediana de Temperatura Corporal por {dia} dias.")
-plt.scatter(dias, dados_extraidos[2][1])
-plt.title(f"SCARTTER - Temperatura da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE MEDIANA de Temperatura")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tDesvio Padrão de Batimento Cardiaco por {dia} dias.")
-plt.scatter(dias, dados_extraidos[0][2])
-plt.title(f"SCARTTER - Batimentos da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Desvio Padrão de BATIMENTO")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tDesvio Padrão de Pressão Arterial por {dia} dias.")
-plt.scatter(dias, dados_extraidos[1][2])
-plt.title(f"SCARTTER - Pressão arterial da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Desvio Padrão de Pressão")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tDesvio Padrão de Temperatura Corporal por {dia} dias.")
-plt.scatter(dias, dados_extraidos[2][2])
-plt.title(f"SCARTTER - Temperatura da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Desvio Padrão")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tVariancia de Batimento Cardiaco por {dia} dias.")
-plt.scatter(dias, dados_extraidos[0][3])
-plt.title(f"SCARTTER - Batimentos da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Variancia")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tVariancia de Pressão Arterial por {dia} dias.")
-plt.scatter(dias, dados_extraidos[1][3])
-plt.title(f"SCARTTER - Pressão arterial da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Variancia")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
-print(f"\tVariancia de Temperatura Corporal por {dia} dias.")
-plt.scatter(dias, dados_extraidos[2][3])
-plt.title(f"SCARTTER - Temperatura da amostra")
-plt.xlabel("FAIXA DE DIA")
-plt.ylabel(f"FAIXA DE Variancia")
-plt.grid()
-plt.show()
-print("------------------------------------------------")
 print("\tCorrelação entre os três parâmetros.")
 auxDF=[]
 auxDF+=[(float(float(matriz_master[0][0][j])),float(matriz_master[1][0][j]),float(matriz_master[2][0][j])) for j in range(0,24)]
@@ -312,4 +272,54 @@ DataFrame=[]
 # MONTAGEM
 DataFrame = pd.DataFrame(auxDF,columns=["BATIMENTO", "PRESSAO","TEMPERATURA"])
 print(DataFrame.corr())
+
+
+## criando a lista, com os dias.
+dia = 100
+dias = []
+for i in range(dia): dias.append(i)
+
+
+while True:
+    print("------------------------------------------------")
+    opcao_p = int(input("\n1 - Batimento.\n2 - Pressão\n3 - Temperatura\n\nQual sua opção? "))
+    opcao_e = int(input("\n1 - Média.\n2 - Mediana\n3 - Desvio Padrão.\n4 - Variancia.\n5 - Valor Minimo\n6 - Valor Maximo\n7 - Amplitude.\n\nQual sua opção? "))
+    print("------------------------------------------------")
+    print(f"\t{EXPLORADOS[opcao_e-1]} de {PARAMETROS[opcao_p-1]} por {dia} dias.")
+    plt.plot(dias, dados_extraidos[opcao_p-1][opcao_e-1])
+    plt.title(f"{PARAMETROS[opcao_p-1]}")
+    plt.xlabel("DIAS.")
+    plt.ylabel(f"FAIXA - {EXPLORADOS[opcao_e-1]}.")
+    
+    """
+        Essa etapa faz a
+        avaliação do perfil da curva.
+        Foi criado um metodo distribuirNaMatriz(X[..])
+        Onde é enviado uma lista com os valores
+        e retorna matriz com os valores em cada lista.
+    """
+    regressao=linear_model.LinearRegression()
+    horas_d = np.array(distribuirNaMatriz(dias))
+    valores =np.array(distribuirNaMatriz(dados_extraidos[opcao_p-1][opcao_e-1]))
+    regressao.fit(horas_d,valores)
+    plt.plot(horas_d, horas_d*regressao.coef_[0][0] + regressao.intercept_, color='red')
+    
+    plt.grid()
+    plt.show()
+    print("------------------------------------------------")
+    print(f"\tHistograma do {PARAMETROS[opcao_p-1]}")
+    # HISTOGRAMA
+    hist=np.histogram(dados_extraidos[opcao_p-1][opcao_e-1])
+    # PLOTAR DADOS
+    plt.hist(dados_extraidos[opcao_p-1][opcao_e-1],bins='auto')
+    plt.title(f"HISTOGRAMA - {PARAMETROS[opcao_p-1]} - {EXPLORADOS[opcao_e-1]}")
+    plt.xlabel("FAIXA")
+    plt.ylabel("OCORRENCIAS")
+    plt.show()
+
+    opcao_p = input("Deseja continuar?\nS - SIM, N - NÃO\n")
+    
+    if((opcao_p == "N") or (opcao_p == "n")):
+        break
+    
 print("------------------------------------------------")
